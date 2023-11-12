@@ -1,0 +1,15 @@
+server:
+  port: 8080 
+  
+camel:
+  springboot:
+    name: ComplaintAPI
+  servlet:
+    mapping:
+      context-path: /*
+  rest:
+    context-path: /
+    
+Complaint_Url:
+  host: ${COMPLAINT_URL}
+  contextPath: ${Complaint_CONTEXTPATH}
