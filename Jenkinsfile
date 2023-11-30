@@ -1,45 +1,24 @@
 pipeline {
     agent any
 
-    environment {
-        MAVEN_HOME = tool 'Maven'
-        COMPLAINT_URL = 'https://4f5ac991-f23a-4e1f-8497-65f31136e50f.mock.pstmn.io'
-    }
-
     stages {
-        stage('Checkout') {
+        stage('Hello') {
             steps {
-                git 'https://github.com/surya-siddhi-sai-2710/Complaint-API.git'
+                echo 'Hello World'
             }
         }
-
-        stage('Build') {
+        stage("Checkout") {
             steps {
-                sh "${MAVEN_HOME}/bin/mvn clean install"
+                checkout scm
             }
         }
-
-        stage('Test') {
+        stage("Docker Build") {
             steps {
-                sh "${MAVEN_HOME}/bin/mvn test"
+               sh '''
+                   #oc start-build --from-build=<build_name>
+                   oc start-build -F red-api --from-dir=.
+               '''
             }
-        }
-
-        stage('Deploy') {
-            steps {
-                // Example: Deploy to a server (replace with your deployment steps)
-                sh 'scp target/complaint-api.jar user@your-server:/path/to/deployment/'
-            }
-        }
-    }
-
-    post {
-        success {
-            echo "Build succeeded! Deploying to production. Complaint URL: ${COMPLAINT_URL}"
-        }
-
-        failure {
-            echo 'Build failed. Notify the team and take corrective actions.'
         }
     }
 }
